@@ -1,0 +1,5 @@
+<?php
+/**
+* @file
+* Shows members of Mailman mailing lists, based on exported member lists.
+*/
