@@ -1,5 +1,57 @@
 <?php
 /**
-* @file
-* Shows members of Mailman mailing lists, based on exported member lists.
-*/
+ * @file
+ * Shows members of Mailman mailing lists, based on exported member lists.
+ */
+
+function DrupalMailmanMembers_menu() {
+  $items = array();
+
+  $items['mailman/members'] = array(
+    'title' => 'Maillijsten',
+    'page callback' => 'getMembersFromAllFiles',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function getMembersFromAllFiles() {
+
+  $dir = "/tmp/mailman_members";
+
+  $str = "";
+
+  foreach(array_filter(glob($dir.'/*'), 'is_file') as $path) {
+    $filename = substr($path, strlen($dir) + 1);
+    $str .= getMembersFromFile($dir, $filename);
+  }
+
+  return $str;
+}
+
+
+function getMembersFromFile($dir, $filename) {
+  $path = $dir . "/" . $filename;
+
+  $mtime = date("d-m-Y", filemtime($path));
+  $members = file($path);
+
+  return printMembers($filename, $members, $mtime);
+}
+
+function printMembers($listname, $members, $date) {
+  $host = "example.com";
+
+  $str = "<h4><a name=\"$listname\">$listname@$host</a> ($date)</h4>"
+    ."<ul>";
+
+  foreach ($members as $member) {
+    $str.= "<li>$member</li>";
+  }
+
+  $str .= "</ul>";
+
+  return $str;
+}

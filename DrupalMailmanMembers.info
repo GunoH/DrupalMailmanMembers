@@ -1,3 +1,5 @@
-name = Drupal Mailman Members
+name = DrupalMailmanMembers
 description = Shows members of Mailman mailing lists, based on exported member lists.
+version = 0.1
 core = 7.x
+files[] = DrupalMailmanMembers.module
